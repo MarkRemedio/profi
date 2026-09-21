@@ -1,0 +1,670 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+/* The document preview rail on the settings pages.
+   The preview is an A4 sheet at a fixed preview zoom, about 492px, and it is
+   only ever scaled *down* to fit - never up, so a rail wider than the sheet
+   is dead space. A settings column sized as a fraction of the grid has no
+   idea where that rail begins either: on a wide screen the two sat 160px
+   apart with nothing between them.
+
+   One number settles it for both settings pages. The rail is this wide; the
+   settings column runs full width with this much padding on its right, so it
+   stops exactly one gutter short of the rail whatever the window is doing -
+   wide or narrow, sidebar open, collapsed, or along the bottom. */
+  --doc-preview-rail: clamp(420px, 34vw, 528px);
+  --doc-preview-gutter: 1.5rem; /* the grid's gap-6 */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.147 0.004 49.3);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.147 0.004 49.3);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.147 0.004 49.3);
+  --primary: oklch(0.214 0.009 43.1);
+  --primary-foreground: oklch(0.986 0.002 67.8);
+  --secondary: oklch(0.96 0.002 17.2);
+  --secondary-foreground: oklch(0.214 0.009 43.1);
+  --muted: oklch(0.96 0.002 17.2);
+  --muted-foreground: oklch(0.547 0.021 43.1);
+  --accent: oklch(0.96 0.002 17.2);
+  --accent-foreground: oklch(0.214 0.009 43.1);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0.005 34.3);
+  --input: oklch(0.922 0.005 34.3);
+  --ring: oklch(0.714 0.014 41.2);
+  --chart-1: oklch(0.868 0.007 39.5);
+  --chart-2: oklch(0.547 0.021 43.1);
+  --chart-3: oklch(0.438 0.017 39.3);
+  --chart-4: oklch(0.367 0.016 35.7);
+  --chart-5: oklch(0.268 0.011 36.5);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.986 0.002 67.8);
+  --sidebar-foreground: oklch(0.147 0.004 49.3);
+  --sidebar-primary: oklch(0.214 0.009 43.1);
+  --sidebar-primary-foreground: oklch(0.986 0.002 67.8);
+  --sidebar-accent: oklch(0.96 0.002 17.2);
+  --sidebar-accent-foreground: oklch(0.214 0.009 43.1);
+  --sidebar-border: oklch(0.922 0.005 34.3);
+  --sidebar-ring: oklch(0.714 0.014 41.2);
+}
+
+.dark {
+  --background: oklch(0.147 0.004 49.3);
+  --foreground: oklch(0.986 0.002 67.8);
+  --card: oklch(0.214 0.009 43.1);
+  --card-foreground: oklch(0.986 0.002 67.8);
+  --popover: oklch(0.214 0.009 43.1);
+  --popover-foreground: oklch(0.986 0.002 67.8);
+  --primary: oklch(0.922 0.005 34.3);
+  --primary-foreground: oklch(0.214 0.009 43.1);
+  --secondary: oklch(0.268 0.011 36.5);
+  --secondary-foreground: oklch(0.986 0.002 67.8);
+  --muted: oklch(0.268 0.011 36.5);
+  --muted-foreground: oklch(0.714 0.014 41.2);
+  --accent: oklch(0.268 0.011 36.5);
+  --accent-foreground: oklch(0.986 0.002 67.8);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.547 0.021 43.1);
+  --chart-1: oklch(0.868 0.007 39.5);
+  --chart-2: oklch(0.547 0.021 43.1);
+  --chart-3: oklch(0.438 0.017 39.3);
+  --chart-4: oklch(0.367 0.016 35.7);
+  --chart-5: oklch(0.268 0.011 36.5);
+  --sidebar: oklch(0.214 0.009 43.1);
+  --sidebar-foreground: oklch(0.986 0.002 67.8);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.986 0.002 67.8);
+  --sidebar-accent: oklch(0.268 0.011 36.5);
+  --sidebar-accent-foreground: oklch(0.986 0.002 67.8);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.547 0.021 43.1);
+}
+
+@layer utilities {
+  /* ✨ Specific Sidebar Custom Scrollbar (Used on small containers) */
+  .modern-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+  }
+  .modern-scrollbar::-webkit-scrollbar {
+    width: 5px; 
+  }
+  .modern-scrollbar::-webkit-scrollbar-track {
+    background: transparent; 
+  }
+  .modern-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1; 
+    border-radius: 10px; 
+  }
+  .modern-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: #94a3b8; 
+  }
+
+  /* A scroller with no visible bar. For the bottom menu, which scrolls
+     sideways when a workspace has more sections than fit the screen: a
+     scrollbar drawn under a floating toolbar reads as a rendering fault, and
+     the overflow is already signalled by items cut off at the edge. */
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  
+  html {
+    @apply font-sans;
+    /* 🚀 THE FIX: Prevent bouncy scrolling that breaks GSAP math */
+    overscroll-behavior-y: none; 
+  }
+
+  /* Radix popovers (Select, DropdownMenu, Dialog) lock body scroll while
+     open, which hides the page scrollbar and shifts the whole layout by its
+     width. Reserve the gutter permanently so the width never changes, and
+     cancel react-remove-scroll-bar's margin compensation (it doesn't know
+     about scrollbar-gutter and would otherwise shift the page the other
+     way). The doubled attribute selector out-specifies its injected rule. */
+  @supports (scrollbar-gutter: stable) {
+    html {
+      scrollbar-gutter: stable;
+    }
+
+    body[data-scroll-locked][data-scroll-locked] {
+      margin-right: 0 !important;
+    }
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    
+    /* 🚀 CHANGED TO clip: This stops horizontal scrolling but ALLOWS sticky to work! */
+    overflow-x: clip; 
+    
+    /* 🚀 THE FIX: Prevent bouncy scrolling on the body too */
+    overscroll-behavior-y: none; 
+    
+    /* Global Firefox Fallback */
+    scrollbar-width: auto;
+    scrollbar-color: #cbd5e1 transparent;
+  }
+
+  /* 🚀 THE MAGIC: Global Chrome/Safari/Edge Floating Scrollbar */
+  ::-webkit-scrollbar {
+    width: 14px; /* Wide enough to allow for the transparent border trick */
+    height: 14px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent; /* Completely invisible track */
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1; /* Beautiful slate color */
+    border-radius: 10px; /* Perfectly round pill shape */
+    
+    /* This pushes the color inward, creating a floating effect away from the screen edge */
+    border: 4px solid transparent; 
+    background-clip: padding-box; 
+    transition: background-color 0.2s ease;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #94a3b8; /* Darkens smoothly on hover */
+  }
+
+  /* 🌙 Dark Mode Support for the global scrollbar */
+  .dark ::-webkit-scrollbar-thumb {
+    background-color: #334155; 
+  }
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background-color: #475569;
+  }
+  .dark {
+    scrollbar-color: #334155 transparent;
+  }
+}
+/* Fills the active segment of the payroll showcase progress bar over the life
+   of one slide. Lives here rather than in styled-jsx so the component stays a
+   plain client component with no extra styling runtime. */
+@keyframes payroll-slide-fill {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/*
+ * The scrollbar for panes that scroll inside a card.
+ *
+ * `custom-scrollbar` was applied in a dozen places and defined in none of
+ * them, so every one of those panes rendered the platform's default — on
+ * Windows a wide grey trough with a stepper arrow at each end, sitting inside
+ * a rounded white card. This is the same idea as the page scrollbar above but
+ * narrower, with no buttons and no track, so a pane reads as content that
+ * happens to continue rather than as a framed sub-window.
+ */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(203 213 225) transparent;
+}
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgb(203 213 225);
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(148 163 184);
+}
+/* The steppers at each end. Chromium only draws them on Windows, which is why
+   this looked fine everywhere it was checked and wrong on the machine it
+   shipped from. */
+.custom-scrollbar::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+.custom-scrollbar::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/*
+ * Fades the top and bottom edge of a scrolling pane.
+ *
+ * A hard cut leaves a line of text sliced in half at the boundary, which reads
+ * as a rendering fault. Fading it says the same thing a scrollbar does — there
+ * is more this way — without needing the scrollbar to be visible at all.
+ */
+.scroll-fade-y {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    #000 14px,
+    #000 calc(100% - 18px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    #000 14px,
+    #000 calc(100% - 18px),
+    transparent 100%
+  );
+}
+
+/*
+ * The Aurelius panel while it fetches a conversation.
+ *
+ * A bare spinner in the middle of an otherwise empty panel says only "wait",
+ * and says it in a box tall enough to look broken. These two animations let
+ * the panel show the shape of what is coming instead: rings breathing out of
+ * the assistant's mark, and a sweep running along placeholder bars that sit
+ * where the starter questions or the first replies will land.
+ *
+ * Plain keyframes rather than a motion library, because this panel is a plain
+ * client component and one loading state is not worth a runtime.
+ */
+@keyframes aurelius-ring {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.45;
+  }
+  70%,
+  100% {
+    transform: scale(1.75);
+    opacity: 0;
+  }
+}
+
+@keyframes aurelius-sweep {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+.aurelius-ring {
+  animation: aurelius-ring 2.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+/* Clipped by the bar it sits in, so the highlight only ever shows inside the
+   placeholder rather than tracking across the whole panel. */
+.aurelius-sweep {
+  position: relative;
+  overflow: hidden;
+}
+.aurelius-sweep::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(255 255 255 / 0.7),
+    transparent
+  );
+  animation: aurelius-sweep 1.7s ease-in-out infinite;
+  /* Staggered per bar by the component, so the highlights chase each other
+     down the list instead of moving as one block. */
+  animation-delay: var(--sweep-delay, 0s);
+}
+.dark .aurelius-sweep::after {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(255 255 255 / 0.09),
+    transparent
+  );
+}
+
+/* Somebody who has asked for less motion still needs to know it is loading,
+   so the bars stay and only the movement goes. */
+@media (prefers-reduced-motion: reduce) {
+  .aurelius-ring,
+  .aurelius-sweep::after {
+    animation: none;
+  }
+  .aurelius-ring {
+    opacity: 0.25;
+  }
+}
+
+/*
+ * The "things worth a look" card in the Aurelius panel.
+ *
+ * It is fetched separately from the conversation, so it lands after the panel
+ * has already painted and settled. Appearing outright shunts everything below
+ * it down with no explanation; opening from nothing reads as the panel finding
+ * something rather than the layout glitching.
+ *
+ * The 0fr-to-1fr grid row is what makes that possible without a fixed height —
+ * the card can be one insight or three and the animation is the same.
+ */
+@keyframes aurelius-reveal {
+  from {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+  to {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+}
+
+.aurelius-reveal {
+  display: grid;
+  grid-template-rows: 1fr;
+  animation: aurelius-reveal 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* The rows inside it, following the card open one after another. */
+@keyframes aurelius-rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.aurelius-rise {
+  animation: aurelius-rise 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--rise-delay, 0s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurelius-reveal,
+  .aurelius-rise {
+    animation: none;
+  }
+}
+
+/* ── Document line rows ─────────────────────────────────────────────────────
+   A row that appears or leaves should take the container's height with it.
+   `height: auto` cannot be transitioned, so the row lives inside a grid whose
+   single track animates between 0fr and 1fr — which does animate, and carries
+   the container along with it.
+
+   Done in CSS rather than React state because state has to be told which row
+   is new, and anything keyed on a row's position gets that wrong the moment a
+   row in the middle is removed. A mount animation needs no such bookkeeping:
+   the browser runs it when the element appears and never replays it. */
+@keyframes document-line-enter {
+  from {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+  to {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+}
+
+@keyframes document-line-leave {
+  from {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+  to {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+}
+
+.document-line {
+  display: grid;
+  grid-template-rows: 1fr;
+  animation: document-line-enter 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.document-line-leaving {
+  animation: document-line-leave 220ms cubic-bezier(0.4, 0, 1, 1) forwards;
+  pointer-events: none;
+}
+
+/* Somebody who has asked for less motion gets the layout change without it. */
+@media (prefers-reduced-motion: reduce) {
+  .document-line,
+  .document-line-leaving {
+    animation: none;
+  }
+}
+
+/* Table rows, which cannot use the grid trick above: `display: grid` on a
+   <tr> destroys the column alignment the table exists for, and a <tr> has no
+   height of its own to transition. So these move and fade instead — the row
+   arrives and leaves visibly, even though the table cannot grow around it. */
+@keyframes document-row-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes document-row-leave {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+}
+
+.document-row {
+  animation: document-row-enter 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.document-row-leaving {
+  animation: document-row-leave 180ms ease-in forwards;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .document-row,
+  .document-row-leaving {
+    animation: none;
+  }
+}
+
+/* ── Line tables on a phone ───────────────────────────────────────────────
+   A document's line table earns its shape from columns that line up down the
+   page, and lining up five columns needs more width than a phone has. The
+   desktop answer — let the table keep its natural width and scroll the card
+   sideways — means reading an invoice line through a 390px window and pushing
+   it left to find the amount.
+
+   Below `md` the same markup is re-laid out as one card per line. The heading
+   each cell sat under is reprinted next to it, taken from `data-label`, so
+   nothing is lost by dropping the header row.
+
+   Same elements, same order, same state: only the boxes they are drawn in
+   change. Deliberately unlayered, so it wins over the Tailwind utilities on
+   the cells it re-lays out. */
+@media (max-width: 767px) {
+  .doc-table-stack,
+  .doc-table-stack tbody,
+  .doc-table-stack tfoot,
+  .doc-table-stack tr,
+  .doc-table-stack td {
+    display: block;
+    width: auto;
+  }
+
+  /* Each heading is reprinted on its own cell below, so the row of them is
+     now duplication. */
+  .doc-table-stack thead {
+    display: none;
+  }
+
+  .doc-table-stack tbody tr {
+    position: relative;
+    margin: 0.625rem 0;
+    border: 1px solid rgb(226 232 240); /* slate-200 */
+    border-radius: 0.625rem;
+    background: #fff;
+    padding: 0.625rem 0.75rem;
+  }
+
+  .doc-table-stack tbody td {
+    padding: 0.3125rem 0;
+  }
+
+  .doc-table-stack td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 0.25rem;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: rgb(100 116 139); /* slate-500 */
+  }
+
+  /* One control to a cell, so it takes the width. A 190px box in a stack
+     leaves a ragged edge and buys nothing. */
+  .doc-table-stack tbody td > input,
+  .doc-table-stack tbody td > select,
+  .doc-table-stack tbody td > textarea,
+  .doc-table-stack tbody td > button,
+  .doc-table-stack tbody td > div {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  /* Remove is an action on the card, not another field in it. */
+  .doc-table-stack td[data-role="remove"] {
+    position: absolute;
+    top: 0.25rem;
+    right: 0.25rem;
+    width: auto;
+    padding: 0;
+  }
+
+  .doc-table-stack td[data-role="remove"] > * {
+    width: auto;
+  }
+
+  /* A read-out rather than a field: the heading and the value sit on one
+     line, the way the totals below do. */
+  .doc-table-stack tbody td[data-inline] {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .doc-table-stack tbody td[data-inline][data-label]::before {
+    margin-bottom: 0;
+  }
+
+  /* A cell with nothing in it is a spacer for a column that no longer
+     exists. */
+  .doc-table-stack tbody td:empty {
+    display: none;
+  }
+
+  /* Totals read as a label/value list rather than a last row. */
+  .doc-table-stack tfoot tr {
+    display: block;
+    border-top: 1px solid rgb(226 232 240);
+    padding: 0.5rem 0.75rem 0.75rem;
+  }
+
+  .doc-table-stack tfoot td {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.25rem 0;
+  }
+
+  .doc-table-stack tfoot td:empty {
+    display: none;
+  }
+
+  .doc-table-stack tfoot td[data-label]::before {
+    margin-bottom: 0;
+  }
+
+  .doc-table-stack tfoot td:not([data-label]) {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: rgb(100 116 139); /* slate-500 */
+  }
+}

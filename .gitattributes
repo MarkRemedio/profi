@@ -1,0 +1,7 @@
+# Force LF on shell scripts and husky hooks so commit/checkout on Windows
+# (core.autocrlf=true) doesn't break them on Linux/macOS or in CI.
+*.sh           text eol=lf
+.husky/*       text eol=lf
+
+# Default: let git auto-detect text vs binary
+*              text=auto

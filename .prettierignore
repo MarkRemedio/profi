@@ -1,0 +1,35 @@
+# Build / dependency output
+node_modules
+.next
+out
+build
+coverage
+dist
+
+# Generated / vendor
+.pnpm-store
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+next-env.d.ts
+*.tsbuildinfo
+
+# Prisma generated
+prisma/migrations/**/migration.sql
+prisma/generated
+
+# Non-JS project areas
+backend
+public
+
+# VCS / IDE / env
+.git
+.husky
+.vercel
+.vscode
+.idea
+.env*
+
+# Misc
+*.min.js
+*.min.css

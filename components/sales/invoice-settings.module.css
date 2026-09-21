@@ -1,0 +1,352 @@
+.desktopPreviewRail {
+  display: none;
+}
+
+.previewRestoreButton {
+  width: 48px;
+  height: 132px;
+  flex-direction: column;
+  gap: 10px;
+  border-color: #cbd5e1;
+  border-radius: 14px;
+  color: #334155;
+  background: rgb(255 255 255 / 96%);
+  box-shadow: 0 12px 28px rgb(15 23 42 / 16%);
+}
+
+.previewRestoreButton span {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.previewViewport {
+  display: flex;
+  min-height: 280px;
+  width: 100%;
+  overflow: hidden;
+  align-items: flex-start;
+  justify-content: center;
+  border: 1px solid #dbe3ed;
+  border-radius: 14px;
+  background: #e8eef5;
+}
+
+.previewViewportLarge {
+  min-height: 0;
+  height: 100%;
+  overflow: auto;
+  padding: 24px;
+}
+
+/*
+ * The measurement-free preview: the document sits in normal flow and the box
+ * scrolls if it does not fit. Centred while it does fit, left-aligned once it
+ * overflows, so a document wider than the panel starts at its left edge rather
+ * than with the middle showing.
+ */
+.previewViewportNatural {
+  overflow: auto;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 10px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.previewNaturalDocument {
+  flex: 0 0 auto;
+  margin: 0 auto;
+}
+
+.previewViewportInteractive {
+  position: relative;
+  cursor: zoom-in;
+  outline: none;
+}
+
+.previewViewportInteractive::after {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  background: rgb(15 23 42 / 0%);
+  transition: background 180ms ease;
+}
+
+.previewViewportInteractive:hover::after,
+.previewViewportInteractive:focus-visible::after {
+  background: rgb(15 23 42 / 10%);
+}
+
+.previewViewportInteractive:focus-visible {
+  box-shadow: 0 0 0 3px rgb(37 99 235 / 28%);
+}
+
+.previewZoomHint {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 1px solid rgb(255 255 255 / 55%);
+  border-radius: 999px;
+  color: #fff;
+  background: rgb(15 23 42 / 80%);
+  box-shadow: 0 12px 30px rgb(15 23 42 / 24%);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -44%) scale(0.94);
+  transition: opacity 180ms ease, transform 180ms ease;
+  backdrop-filter: blur(8px);
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.previewViewportInteractive:hover .previewZoomHint,
+.previewViewportInteractive:focus-visible .previewZoomHint {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/*
+ * No transition on the measured size.
+ *
+ * The width, height and scale here are recomputed by a ResizeObserver, so while
+ * a window is being dragged they change many times a second. Animating them
+ * meant every one of those changes began a fresh 180ms tween towards a value
+ * that had already moved — the preview bounced along behind the drag instead of
+ * tracking it. Set directly, it follows the container exactly.
+ */
+.previewStage {
+  position: relative;
+  flex: 0 0 auto;
+  margin: 0 auto;
+}
+
+.previewDocument {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: max-content;
+  transform-origin: top left;
+  /* Opacity only — the transform is measured, see .previewStage above. */
+  transition: opacity 120ms ease;
+}
+
+.templateThumbnail {
+  --template-ink: #2563eb;
+  position: relative;
+  height: 76px;
+  overflow: hidden;
+  border: 1px solid #dbe3ed;
+  border-radius: 9px;
+  background: var(--template-tertiary, #fff);
+}
+
+.templateThumbnail span {
+  position: absolute;
+  display: block;
+  border-radius: 999px;
+}
+
+.thumbnailSidebar {
+  display: none !important;
+}
+
+.thumbnailHeader {
+  top: 16px;
+  left: 14px;
+  width: 48%;
+  height: 6px;
+  background: var(--template-ink);
+}
+
+.thumbnailLineOne {
+  top: 31px;
+  left: 14px;
+  right: 14px;
+  height: 4px;
+  background: var(--template-secondary, color-mix(in srgb, var(--template-ink) 28%, white));
+}
+
+.thumbnailLineTwo {
+  top: 43px;
+  left: 14px;
+  width: 62%;
+  height: 4px;
+  background: color-mix(in srgb, var(--template-secondary, var(--template-ink)) 58%, var(--template-tertiary, white));
+}
+
+.thumbnailTotal {
+  right: 14px;
+  bottom: 12px;
+  width: 27%;
+  height: 7px;
+  background: var(--template-secondary, color-mix(in srgb, var(--template-ink) 42%, white));
+}
+
+.thumbnail_professional .thumbnailHeader {
+  background: var(--template-ink);
+}
+
+.thumbnail_professional {
+  border-left: 4px solid var(--template-ink);
+}
+
+.thumbnail_classic {
+  border-radius: 0;
+}
+
+.thumbnail_classic .thumbnailHeader {
+  left: 22%;
+  width: 56%;
+  height: 4px;
+  background: var(--template-ink);
+}
+
+.thumbnail_classic .thumbnailLineOne {
+  top: 28px;
+  height: 2px;
+  background: var(--template-ink);
+}
+
+.thumbnail_classic .thumbnailLineTwo {
+  top: 34px;
+  width: auto;
+  right: 14px;
+  height: 1px;
+  background: var(--template-ink);
+}
+
+.thumbnail_classic .thumbnailTotal {
+  right: 14px;
+  bottom: 15px;
+  height: 2px;
+  background: var(--template-ink);
+  box-shadow: 0 4px 0 var(--template-ink);
+}
+
+.thumbnail_modern .thumbnailSidebar {
+  display: block !important;
+  inset: 0 auto 0 0;
+  width: 30%;
+  border-radius: 0;
+  background: var(--template-ink);
+}
+
+.thumbnail_modern .thumbnailHeader,
+.thumbnail_modern .thumbnailLineOne,
+.thumbnail_modern .thumbnailLineTwo {
+  left: 38%;
+}
+
+.thumbnail_modern .thumbnailHeader {
+  width: 32%;
+}
+
+.thumbnail_corporate .thumbnailHeader {
+  inset: 0 0 auto;
+  width: auto;
+  height: 20px;
+  border-radius: 0;
+  background: var(--template-ink);
+  box-shadow: inset 0 -3px 0 var(--template-secondary);
+}
+
+.thumbnail_corporate .thumbnailLineOne,
+.thumbnail_corporate .thumbnailLineTwo {
+  background: color-mix(in srgb, var(--template-secondary) 58%, var(--template-tertiary));
+}
+
+.thumbnail_elegant {
+  background: var(--template-tertiary);
+}
+
+.thumbnail_elegant .thumbnailHeader {
+  left: 25%;
+  width: 50%;
+  height: 3px;
+}
+
+.thumbnail_elegant .thumbnailLineOne {
+  top: 28px;
+  background: var(--template-ink);
+}
+
+.thumbnail_elegant .thumbnailLineTwo {
+  background: color-mix(in srgb, var(--template-secondary) 60%, var(--template-tertiary));
+}
+
+.thumbnail_bold {
+  border-left: 5px solid var(--template-ink);
+}
+
+.thumbnail_bold .thumbnailHeader {
+  width: 62%;
+  background: var(--template-secondary);
+}
+
+.thumbnail_bold .thumbnailLineOne {
+  background: var(--template-secondary);
+}
+
+.thumbnail_bold .thumbnailTotal {
+  width: 34%;
+  height: 12px;
+  border-radius: 4px;
+  background: var(--template-tertiary);
+}
+
+/*
+ * The fixed rail is positioned from the top with a fixed offset tuned to the
+ * single-row header. Below xl the header stacks — title on one row, document
+ * tabs on the next — which pushes the content down while the rail stays put, so
+ * it landed on top of the tab strip. It now only appears where that header is
+ * one row, and the stacked preview covers everything narrower.
+ */
+@media (min-width: 1280px) {
+  .desktopPreviewRail {
+    display: block;
+    position: fixed;
+    z-index: 20;
+    top: 152px;
+    right: 32px;
+    width: var(--doc-preview-rail);
+    max-height: calc(100vh - 168px);
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    transform-origin: top right;
+    /*
+     * Only `right` animates. Width and max-height are derived from vw and vh, so
+     * transitioning them meant every step of a window resize started a fresh
+     * 300ms animation towards a size that had already changed again — the rail
+     * wobbled behind the drag instead of tracking it. `right` is a fixed pixel
+     * value that only changes when the panel is collapsed, which is the one case
+     * the animation was for.
+     */
+    transition: right 340ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .desktopPreviewRailCollapsed {
+    right: 18px;
+    width: 48px;
+    max-height: none;
+    overflow: visible;
+  }
+}
+
+@media (max-width: 640px) {
+  .previewViewportLarge {
+    padding: 12px;
+  }
+}

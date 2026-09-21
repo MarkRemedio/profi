@@ -1,0 +1,36 @@
+"use client";
+
+import Link from "next/link";
+import { AlertTriangle, BookOpen, Building2, CalendarDays, CheckCircle2, ExternalLink, FileText, Loader2, Scale, Sparkles, WalletCards } from "lucide-react";
+import { useMarkAiReconciliationReviewed, useReconciliationAnalysis, type FeedTransaction } from "@/lib/banking/api";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { formatMoney } from "@/lib/currency";
+
+const icons = { amount: Scale, direction: WalletCards, bank_account: Building2, date: CalendarDays, description: FileText } as const;
+
+function tone(score: number) {
+  if (score >= 90) return { text: "text-emerald-700", bg: "bg-emerald-500", chip: "bg-emerald-50 text-emerald-700" };
+  if (score >= 70) return { text: "text-amber-700", bg: "bg-amber-500", chip: "bg-amber-50 text-amber-800" };
+  return { text: "text-red-700", bg: "bg-red-500", chip: "bg-red-50 text-red-700" };
+}
+
+export function ReconciliationAnalysisDialog({ transaction, onClose }: { transaction: FeedTransaction; onClose: () => void }) {
+  const analysis = useReconciliationAnalysis(transaction.id);
+  const markReviewed = useMarkAiReconciliationReviewed();
+  const value = analysis.data;
+  const overall = tone(value?.confidence ?? 0);
+  return <Dialog open onOpenChange={(open) => !open && onClose()}><DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
+    <DialogHeader><DialogTitle className="flex items-center gap-2"><Sparkles className="size-5 text-violet-600" /> Reconciliation analysis</DialogTitle><DialogDescription>Why this bank transaction was matched to its accounting record.</DialogDescription></DialogHeader>
+    {analysis.isLoading ? <div className="flex min-h-56 items-center justify-center gap-2 text-sm text-slate-500"><Loader2 className="size-4 animate-spin" /> Checking the matched accounting entry…</div> : null}
+    {analysis.isError ? <div role="alert" className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">We could not load this reconciliation analysis. The existing reconciliation has not been changed.</div> : null}
+    {value ? <div className="space-y-5">
+      <section className="rounded-xl border border-slate-200 p-4"><div className="flex items-center justify-between gap-4"><div><p className="text-sm font-bold text-slate-950">{value.ai_created ? "AI match confidence" : "Match confidence"}</p><p className="mt-1 text-xs text-slate-500">Calculated from the bank transaction and posted accounting entry</p></div><span className={`text-2xl font-extrabold ${overall.text}`}>{value.confidence}%</span></div><div className="mt-3 h-2 overflow-hidden rounded-full bg-slate-100"><div className={`h-full rounded-full ${overall.bg}`} style={{ width: `${value.confidence}%` }} /></div><p className="mt-3 text-sm leading-6 text-slate-700">{value.summary}</p></section>
+      {value.ai_created && value.ai_review_status === "needs_review" ? <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900"><div className="flex gap-2"><AlertTriangle className="mt-0.5 size-4 shrink-0" /><span>This supporting record was created by AI. Check the contact, category, VAT treatment, and document type.</span></div><button type="button" disabled={markReviewed.isPending} onClick={() => markReviewed.mutate(transaction.id)} className="mt-3 inline-flex items-center gap-1.5 rounded-md bg-amber-900 px-3 py-1.5 text-xs font-bold text-white hover:bg-amber-800 disabled:opacity-50"><CheckCircle2 className="size-3.5" />{markReviewed.isPending ? "Saving…" : "Mark as reviewed"}</button></div> : null}
+      {value.ai_created && value.ai_review_status === "reviewed" ? <div className="flex gap-2 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-900"><CheckCircle2 className="mt-0.5 size-4 shrink-0" /><span>An accountant has reviewed this AI-created record.</span></div> : null}
+      <section><div className="flex items-center justify-between gap-3"><h3 className="text-sm font-bold text-slate-950">Created or matched record</h3>{value.matched_record.record_href ? <Link href={value.matched_record.record_href} className="inline-flex items-center gap-1 text-xs font-semibold text-blue-700 hover:underline">Open {value.matched_record.record_type}<ExternalLink className="size-3" /></Link> : null}</div><div className="mt-2 rounded-xl border border-slate-200 bg-slate-50 p-4"><div className="flex items-start gap-3"><span className="grid size-9 shrink-0 place-items-center rounded-lg bg-white text-blue-600 shadow-sm"><FileText className="size-4" /></span><div><p className="text-xs font-semibold uppercase tracking-wide text-slate-500">{value.matched_record.record_type}</p><p className="mt-1 font-semibold text-slate-900">{value.matched_record.memo}</p><p className="mt-1 text-xs text-slate-500">{value.matched_record.date}{value.matched_record.contact_name ? ` · ${value.matched_record.contact_name}` : ""}</p></div></div><p className="mt-3 font-mono text-[10px] text-slate-400">Journal reference: {value.matched_record.journal_id}</p></div></section>
+      <section><h3 className="flex items-center gap-2 text-sm font-bold text-slate-950"><BookOpen className="size-4 text-blue-600" /> Chart of Accounts used</h3>{value.matched_record.chart_accounts.length ? <div className="mt-2 overflow-hidden rounded-xl border border-slate-200">{value.matched_record.chart_accounts.map((account) => <div key={`${account.code}-${account.name}`} className="flex items-center justify-between gap-4 border-b border-slate-100 bg-white px-4 py-3 last:border-b-0"><div className="min-w-0"><p className="font-mono text-xs font-bold text-blue-700">{account.code}</p><p className="truncate text-sm font-semibold text-slate-900">{account.name}</p><p className="text-xs capitalize text-slate-500">{account.report_category.replaceAll("_", " ")}</p></div><span className="shrink-0 text-sm font-bold text-slate-900">{formatMoney(account.amount_minor, transaction.currency)}</span></div>)}</div> : <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">No category allocation was saved for this older reconciliation. Open the journal reference above to review its accounts.</div>}</section>
+      <section><h3 className="text-sm font-bold text-slate-950">Analysis breakdown</h3><div className="mt-2 space-y-2">{value.breakdown.map((item) => { const Icon = icons[item.key]; const colors = tone(item.score); return <div key={item.key} className="flex items-start gap-3 rounded-xl border border-slate-200 p-3"><span className="grid size-9 shrink-0 place-items-center rounded-lg bg-slate-50 text-slate-500"><Icon className="size-4" /></span><div className="min-w-0 flex-1"><div className="flex items-center justify-between gap-3"><p className="text-sm font-semibold text-slate-900">{item.label}</p><span className={`rounded-full px-2 py-0.5 text-xs font-bold ${colors.chip}`}>{item.score}%</span></div><p className="mt-1 text-xs leading-5 text-slate-500">{item.detail}</p></div></div>; })}</div></section>
+      <div className="flex items-center gap-2 text-xs text-slate-500"><CheckCircle2 className="size-4 text-emerald-600" /> This explanation does not change the posted reconciliation.</div>
+    </div> : null}
+  </DialogContent></Dialog>;
+}

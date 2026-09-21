@@ -1,0 +1,16 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/cleanup-statements",
+      "schedule": "0 3 * * *"
+    },
+    {
+      "path": "/api/cron/invoice-reminders",
+      "schedule": "0 9 * * 1-5"
+    },
+    {
+      "path": "/api/cron/truelayer-bank-feeds",
+      "schedule": "*/5 * * * *"
+    }
+  ]
+}

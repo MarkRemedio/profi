@@ -1,0 +1,290 @@
+/*
+ * Miniatures of the six report templates, for the picker.
+ *
+ * The same device the invoice layout picker uses: a few absolutely positioned
+ * bars standing in for the letterhead, the rows and the bottom line, tinted
+ * with the chosen accent. Not a rendering of the document — the live preview
+ * beside the picker does that — just enough shape to tell the layouts apart at
+ * a glance.
+ *
+ * These are report layouts, so they differ from the invoice thumbnails: what
+ * distinguishes them is where the letterhead sits, whether the rows are ruled
+ * or banded, and whether the sections are cards.
+ */
+
+.thumbnail {
+  --ink: #1e3a5f;
+  --wash: #eef2f7;
+  position: relative;
+  height: 76px;
+  overflow: hidden;
+  border: 1px solid #dbe3ed;
+  border-radius: 9px;
+  background: #fff;
+}
+
+.thumbnail span {
+  position: absolute;
+  display: block;
+  border-radius: 999px;
+}
+
+/* Shared furniture. Each theme repositions what it needs. */
+
+.header {
+  top: 12px;
+  left: 14px;
+  width: 46%;
+  height: 6px;
+  background: var(--ink);
+}
+
+.rule {
+  top: 26px;
+  left: 14px;
+  right: 14px;
+  height: 2px;
+  background: var(--wash);
+}
+
+.lineOne {
+  top: 36px;
+  left: 14px;
+  right: 14px;
+  height: 4px;
+  background: var(--wash);
+}
+
+.lineTwo {
+  top: 47px;
+  left: 14px;
+  width: 62%;
+  height: 4px;
+  background: var(--wash);
+}
+
+.total {
+  right: 14px;
+  bottom: 12px;
+  width: 27%;
+  height: 7px;
+  background: var(--ink);
+}
+
+/* ---- Professional: centred letterhead over a banded ledger ------------- */
+
+.professional .header {
+  left: 50%;
+  width: 40%;
+  transform: translateX(-50%);
+}
+
+.professional .rule {
+  height: 3px;
+  background: var(--ink);
+  opacity: 0.35;
+}
+
+/* ---- Classic: double rule, black ink, nothing filled ------------------- */
+
+.classic {
+  --ink: #111;
+}
+
+.classic .header {
+  left: 50%;
+  width: 44%;
+  height: 5px;
+  transform: translateX(-50%);
+  border-radius: 0;
+}
+
+.classic .rule {
+  top: 24px;
+  height: 1px;
+  background: #111;
+  box-shadow: 0 3px 0 #111;
+}
+
+.classic .lineOne,
+.classic .lineTwo {
+  height: 3px;
+  background: #d6d6d6;
+  border-radius: 0;
+}
+
+.classic .total {
+  height: 4px;
+  background: #111;
+  border-radius: 0;
+}
+
+/* ---- Corporate: full-bleed band and a metadata strip ------------------- */
+
+.corporate .header {
+  top: 0;
+  left: 0;
+  right: 0;
+  width: auto;
+  height: 17px;
+  border-radius: 0;
+}
+
+.corporate .rule {
+  top: 17px;
+  left: 0;
+  right: 0;
+  height: 9px;
+  border-radius: 0;
+  background: var(--wash);
+}
+
+.corporate .lineOne { top: 34px; }
+.corporate .lineTwo { top: 44px; }
+
+.corporate .total {
+  right: 0;
+  left: 0;
+  bottom: 0;
+  width: auto;
+  height: 12px;
+  border-radius: 0;
+}
+
+/* ---- Bold: accent spine, heavy title, sections as cards ---------------- */
+
+.bold .header {
+  top: 12px;
+  left: 22px;
+  width: 40%;
+  height: 9px;
+  border-radius: 2px;
+}
+
+.bold .rule {
+  top: 12px;
+  left: 12px;
+  right: auto;
+  width: 5px;
+  height: 22px;
+  border-radius: 3px;
+  background: var(--ink);
+}
+
+.bold .lineOne {
+  top: 40px;
+  left: 12px;
+  right: 12px;
+  height: 10px;
+  border-radius: 3px;
+  background: var(--wash);
+  border-left: 3px solid var(--ink);
+}
+
+.bold .lineTwo {
+  top: 54px;
+  left: 12px;
+  right: 12px;
+  width: auto;
+  height: 3px;
+  background: #e6ebf2;
+}
+
+.bold .total {
+  left: 12px;
+  right: 12px;
+  bottom: 8px;
+  width: auto;
+  height: 9px;
+  border-radius: 3px;
+}
+
+/* ---- Modern: solid masthead panel, open rows -------------------------- */
+
+.modern .header {
+  top: 10px;
+  left: 12px;
+  width: 32%;
+  height: 30px;
+  border-radius: 5px;
+}
+
+.modern .rule {
+  top: 14px;
+  left: 48%;
+  right: 12px;
+  height: 7px;
+  background: #cbd5e1;
+}
+
+.modern .lineOne {
+  top: 48px;
+  left: 12px;
+  right: 12px;
+  height: 3px;
+  background: #e6ebf2;
+}
+
+.modern .lineTwo {
+  top: 56px;
+  left: 12px;
+  width: 58%;
+  height: 3px;
+  background: #e6ebf2;
+}
+
+.modern .total {
+  right: 12px;
+  bottom: 9px;
+  width: 30%;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--wash);
+  border: 1px solid var(--ink);
+}
+
+/* ---- Elegant: centred serif masthead, hairline flourish --------------- */
+
+.elegant .header {
+  left: 50%;
+  width: 38%;
+  height: 5px;
+  transform: translateX(-50%);
+}
+
+.elegant .rule {
+  top: 24px;
+  left: 34%;
+  right: 34%;
+  height: 1px;
+  background: var(--ink);
+}
+
+.elegant .lineOne {
+  top: 34px;
+  left: 12px;
+  width: 28%;
+  height: 16px;
+  border-radius: 2px;
+  background: var(--wash);
+  border-left: 2px solid var(--ink);
+}
+
+.elegant .lineTwo {
+  top: 36px;
+  left: 46%;
+  right: 12px;
+  width: auto;
+  height: 3px;
+  background: #e6ebf2;
+}
+
+.elegant .total {
+  left: 46%;
+  right: 12px;
+  bottom: 14px;
+  width: auto;
+  height: 4px;
+  border-radius: 0;
+  background: var(--ink);
+}

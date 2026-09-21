@@ -1,0 +1,1550 @@
+.document {
+  --ink: #102a43;
+  --muted: #526b82;
+  --line: #cad7e3;
+  --surface: #f1f6fa;
+  --accent: var(--invoice-accent, #102a43);
+  --palette-secondary: var(--invoice-secondary, #d9e8f5);
+  --palette-tertiary: var(--invoice-tertiary, #ffffff);
+  --text: var(--invoice-text, var(--ink));
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  padding: 14mm;
+  box-sizing: border-box;
+  color: var(--text);
+  background: #fff;
+  font-size: 8.5pt;
+  line-height: 1.35;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.letter {
+  width: 216mm;
+  min-height: 279.4mm;
+}
+.document.sans {
+  font-family: Arial, Helvetica, sans-serif;
+}
+.document.humanist {
+  font-family: "Trebuchet MS", Verdana, Arial, sans-serif;
+}
+.document.serif {
+  font-family: Georgia, "Times New Roman", serif;
+}
+.document.editorial {
+  font-family: Palatino, "Palatino Linotype", "Book Antiqua", Georgia, serif;
+}
+.document.mono {
+  font-family: "Courier New", Courier, monospace;
+}
+.multiline {
+  white-space: pre-line;
+}
+
+/* Keep the physical sheet size while letting short invoices use their spare
+   vertical room inside the line-items region, not below the footer. */
+.document:not(.modern) {
+  display: flex;
+  flex-direction: column;
+}
+
+.document:not(.modern) .itemsSection {
+  flex: 1 0 auto;
+}
+
+.letterhead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12mm;
+  min-height: 31mm;
+  padding-bottom: 8mm;
+  border-bottom: 2px solid var(--ink);
+}
+.companyIdentity {
+  display: flex;
+  align-items: flex-start;
+  gap: 4mm;
+  min-width: 0;
+}
+.companyIdentity h1 {
+  margin: 0 0 1mm;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 17pt;
+  line-height: 1.1;
+}
+.companyIdentity p {
+  margin: 0.5mm 0;
+  color: var(--muted);
+  font-size: 7.5pt;
+}
+.identityNumbers {
+  font-weight: 600;
+}
+
+.previewHighlight {
+  position: relative;
+  z-index: 2;
+  border-radius: 1.5mm;
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgb(37 99 235 / 16%);
+  animation: previewHighlightPulse 1.25s ease-in-out infinite;
+}
+
+@keyframes previewHighlightPulse {
+  0%,
+  100% {
+    outline-color: rgb(37 99 235 / 85%);
+    box-shadow: 0 0 0 3px rgb(37 99 235 / 12%);
+  }
+
+  50% {
+    outline-color: #3b82f6;
+    box-shadow: 0 0 0 7px rgb(59 130 246 / 22%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .previewHighlight {
+    animation: none;
+  }
+}
+.logo {
+  width: auto;
+  max-width: 33mm;
+  max-height: 18mm;
+  object-fit: contain;
+}
+.logoFallback {
+  display: grid;
+  width: 12mm;
+  height: 12mm;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 1mm;
+  color: #fff;
+  background: var(--ink);
+  font-weight: 800;
+}
+.documentTitle {
+  flex: 0 0 auto;
+  text-align: right;
+}
+.documentTitle h2 {
+  margin: 0 0 2mm;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 18pt;
+  letter-spacing: 0.05em;
+}
+.documentTitle p {
+  margin: 1mm 0;
+  color: var(--muted);
+  font-size: 7.5pt;
+}
+.status {
+  display: inline-block;
+  margin-bottom: 2mm;
+  padding: 1.5mm 4mm;
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, white);
+  border-radius: 1mm;
+  color: #047857;
+  background: #ecfdf5;
+  font-size: 7pt;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.summaryMetrics {
+  display: none;
+}
+
+.boldFacts {
+  display: none;
+}
+
+.partyGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 3mm;
+  margin-top: 8mm;
+}
+.partyCard {
+  min-height: 24mm;
+  padding: 4mm;
+  border: 1px solid var(--line);
+  border-left: 1mm solid var(--accent);
+  border-radius: 1mm;
+  background: var(--surface);
+}
+.partyCard p {
+  margin: 1mm 0;
+  color: var(--muted);
+}
+.partyCard > strong {
+  display: block;
+  margin-bottom: 1mm;
+  color: var(--ink);
+}
+.sectionLabel {
+  margin: 0 0 2mm !important;
+  color: var(--ink) !important;
+  font-size: 7pt;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.detailStrip {
+  display: flex;
+  margin: 3mm 0 0;
+  border: 1px solid var(--line);
+}
+.detailStrip div {
+  min-width: 30mm;
+  flex: 1;
+  padding: 2.5mm 3mm;
+}
+.detailStrip div + div {
+  border-left: 1px solid var(--line);
+}
+.detailStrip dt {
+  color: var(--muted);
+  font-size: 6.5pt;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.detailStrip dd {
+  margin: 0.7mm 0 0;
+  font-weight: 700;
+}
+
+.itemsSection {
+  margin-top: 3mm;
+}
+.itemsSection h3,
+.paymentInstructions h3 {
+  margin: 0 0 2mm;
+  padding-bottom: 1.5mm;
+  border-bottom: 1px solid var(--line);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 11pt;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+.itemsTable {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.itemsTable thead {
+  display: table-header-group;
+}
+.itemsTable th {
+  padding: 2mm;
+  color: #fff;
+  background: var(--ink);
+  font-size: 6.5pt;
+  letter-spacing: 0.05em;
+  text-align: left;
+  text-transform: uppercase;
+}
+.itemsTable td {
+  padding: 2mm;
+  border-bottom: 1px solid var(--line);
+  overflow-wrap: anywhere;
+  vertical-align: top;
+}
+.itemsTable tbody tr:nth-child(even) {
+  background: color-mix(in srgb, var(--surface) 70%, white);
+}
+.itemsTable tbody tr {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.indexColumn {
+  width: 7mm;
+}
+.dateColumn {
+  width: 21mm;
+}
+.detailColumn {
+  width: 24mm;
+}
+.quantityColumn {
+  width: 13mm;
+}
+.moneyColumn {
+  width: 24mm;
+  text-align: right !important;
+}
+
+.allDetails {
+  font-size: 7pt;
+}
+
+.allDetails .dateColumn {
+  width: 18mm;
+}
+
+.allDetails .detailColumn {
+  width: 17mm;
+}
+
+.allDetails .quantityColumn {
+  width: 10mm;
+}
+
+.allDetails .moneyColumn {
+  width: 20mm;
+}
+.number {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.termsAndTotals {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 50mm;
+  gap: 3mm;
+  align-items: start;
+  margin-top: 4mm;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.termsCard {
+  min-height: 28mm;
+  padding: 4mm;
+  border: 1px solid var(--line);
+  border-left: 1mm solid var(--accent);
+  background: var(--surface);
+}
+.termsCard ol {
+  margin: 0;
+  padding-left: 4mm;
+}
+.termsCard li + li {
+  margin-top: 1mm;
+}
+/*
+ * A blank line in the terms box, carried onto the page.
+ *
+ * Wider than the 1mm between ordinary terms so the break is visibly a break,
+ * but not so wide that two groups stop reading as one list. Placed after the
+ * `li + li` rule so it wins on equal specificity.
+ */
+.termsCard li.termGap {
+  margin-top: 3mm;
+}
+.totals {
+  margin: 0;
+  padding: 3mm;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.totals div {
+  display: flex;
+  justify-content: space-between;
+  gap: 4mm;
+  padding: 1.5mm 0;
+}
+.totals dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.totalDue {
+  margin-top: 1.5mm;
+  border-top: 1px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+  color: var(--ink);
+  font-size: 9pt;
+  font-weight: 800;
+}
+.totalDue dd {
+  color: var(--accent);
+}
+
+.paymentInstructions {
+  margin-top: 4mm;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.paymentInstructions p {
+  margin: 1mm 0;
+  padding: 0 3mm;
+  color: var(--muted);
+}
+/*
+ * Bank details as aligned rows rather than a run-on line.
+ *
+ * Two columns: labels sized to the longest of them, values filling the rest, so
+ * every value starts at the same x and the block reads like a set of details
+ * instead of a sentence. The wrapping div is `display: contents` so each dt/dd
+ * pair joins the same grid — without it every pair would be its own row box and
+ * the columns would not line up between them.
+ *
+ * Values are allowed to break because an IBAN is long and a narrow template
+ * would otherwise push the column out past the page edge.
+ */
+.paymentRows {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  margin: 1mm 0;
+  padding: 0 3mm;
+  column-gap: 3mm;
+  row-gap: 0.8mm;
+  color: var(--muted);
+}
+.paymentRows > div {
+  display: contents;
+}
+.paymentRows dt {
+  font-weight: 700;
+  white-space: nowrap;
+}
+.paymentRows dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.paymentInstructions strong {
+  color: var(--ink);
+}
+.footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 5mm;
+  margin-top: 6mm;
+  padding-top: 3mm;
+  border-top: 2px solid var(--ink);
+  color: var(--muted);
+  font-size: 6.5pt;
+}
+.footer span:nth-child(2) {
+  max-width: 95mm;
+  text-align: center;
+  font-style: italic;
+}
+.footer span:last-child {
+  white-space: nowrap;
+}
+
+/*
+ * The stamp & signature block, between the payment instructions and the page
+ * footer. Rendered only when there is something to show, so none of this ever
+ * draws an empty slot.
+ *
+ * Sizes are caps, not boxes: both images keep their own aspect ratio and
+ * shrink to fit, so a wide rubber stamp and a tall round one are both held to
+ * a natural size (~28mm, roughly 106px on screen) without distortion.
+ */
+.signatureBlock {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  gap: 10mm;
+  margin-top: 6mm;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.stampImage {
+  max-width: 32mm;
+  max-height: 28mm;
+  object-fit: contain;
+}
+.signatureArea {
+  min-width: 48mm;
+  max-width: 62mm;
+  text-align: center;
+}
+.signatureImage {
+  display: block;
+  margin: 0 auto;
+  max-width: 48mm;
+  max-height: 16mm;
+  object-fit: contain;
+}
+/* The ruled line a signature sits on, with the signatory named beneath it in
+   the document's own type — the same inheritance the rest of the page uses. */
+.signatureRule {
+  margin-top: 1.5mm;
+  padding-top: 1.5mm;
+  border-top: 1px solid var(--ink);
+}
+.signatureRule strong {
+  display: block;
+  color: var(--text);
+  font-size: 8pt;
+}
+.signatureRule span {
+  display: block;
+  margin-top: 0.5mm;
+  color: var(--muted);
+  font-size: 6.5pt;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.professional {
+  --ink: var(--invoice-accent, #102a43);
+  --line: color-mix(in srgb, var(--palette-secondary) 70%, var(--ink));
+  --surface: color-mix(in srgb, var(--palette-secondary) 72%, var(--palette-tertiary));
+  background: var(--palette-tertiary);
+}
+
+.classic {
+  --ink: var(--invoice-accent, #111827);
+  --muted: #333;
+  --line: var(--palette-secondary);
+  --surface: var(--palette-tertiary);
+  --accent: var(--invoice-accent, #111827);
+  background: var(--palette-tertiary);
+}
+.classic .letterhead {
+  display: block;
+  text-align: center;
+  min-height: 0;
+  padding-top: 4mm;
+  border-top: 3px solid var(--accent);
+  border-bottom: 4px double var(--ink);
+}
+.classic .companyIdentity {
+  display: block;
+}
+.classic .logo,
+.classic .logoFallback {
+  margin: 0 auto 2mm;
+}
+.classic .documentTitle {
+  margin-top: 4mm;
+  text-align: center;
+}
+.classic .documentTitle h2 {
+  display: inline-block;
+  border-bottom: 1px solid #111;
+}
+.classic .status {
+  border: 0;
+  color: #111;
+  background: transparent;
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+}
+.classic .partyGrid {
+  grid-template-columns: 1fr 1fr;
+}
+.classic .partyCard:last-child {
+  grid-column: 1 / -1;
+  min-height: 0;
+  padding-block: 2mm;
+  text-align: center;
+}
+.classic .partyCard,
+.classic .termsCard {
+  border-radius: 0;
+  border-left-width: 0;
+  background: var(--palette-tertiary);
+}
+.classic .itemsTable th {
+  color: var(--ink);
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  background: var(--palette-tertiary);
+}
+.classic .totalDue {
+  border-bottom: 3px double var(--ink);
+}
+
+.modern {
+  --ink: #0f172a;
+  --muted: #64748b;
+  --line: var(--palette-secondary);
+  --surface: color-mix(in srgb, var(--palette-secondary) 32%, var(--palette-tertiary));
+  --accent: var(--invoice-accent, #4338ca);
+  display: grid;
+  grid-template-columns: 30% 70%;
+  grid-template-rows: minmax(min-content, 1fr) auto auto auto auto;
+  padding: 0;
+  overflow: hidden;
+  background: var(--palette-tertiary);
+}
+.modern .letterhead {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  min-height: 0;
+  padding: 10mm 7mm 4mm;
+  flex-direction: column;
+  /*
+   * Packed from the top, and a gap sized for a column.
+   *
+   * The base rule sets `justify-content: space-between` and a 12mm gap, both
+   * written for a letterhead that runs across the page. Turned on its side into
+   * this sidebar — which takes the grid's 1fr row and is therefore as tall as
+   * the sheet — space-between drove the company block to the very top and the
+   * document facts most of the way down it, leaving a void between them that
+   * read as a rendering fault.
+   *
+   * Top-packed instead. The leftover height now falls below the block, where
+   * the bill-to and reference panels sit against the bottom of the sidebar.
+   */
+  justify-content: flex-start;
+  gap: 6mm;
+  border: 0;
+  color: #fff;
+  background: var(--accent);
+}
+.modern .companyIdentity {
+  flex-direction: column;
+}
+.modern .companyIdentity h1,
+.modern .companyIdentity p,
+.modern .documentTitle p {
+  color: #fff;
+}
+.modern .companyIdentity p,
+.modern .documentTitle p {
+  opacity: 0.75;
+}
+.modern .logoFallback {
+  width: 17mm;
+  height: 17mm;
+  border: 1px solid rgb(255 255 255 / 28%);
+  border-radius: 3mm;
+  background: rgb(255 255 255 / 16%);
+  font-size: 14pt;
+}
+.modern .documentTitle {
+  padding: 4mm 0 0;
+  text-align: left;
+}
+.modern .documentTitle h2 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 20pt;
+}
+.modern .status {
+  color: #fff;
+  border-color: rgb(255 255 255 / 28%);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 18%);
+}
+.modern .partyGrid {
+  grid-column: 1;
+  grid-row: 2;
+  grid-template-columns: 1fr;
+  gap: 0;
+  margin: 0;
+  padding: 3mm 7mm;
+  color: #fff;
+  background: var(--accent);
+}
+.modern .partyCard {
+  min-height: 0;
+  padding: 3mm 0;
+  border: 0;
+  border-top: 1px solid rgb(255 255 255 / 20%);
+  background: transparent;
+}
+.modern .partyCard p,
+.modern .partyCard strong,
+.modern .partyCard .sectionLabel {
+  color: #fff !important;
+}
+.modern .partyCard p {
+  opacity: 0.75;
+}
+.modern .detailStrip {
+  grid-column: 1;
+  grid-row: 3 / 5;
+  display: block;
+  margin: 0;
+  padding: 2mm 7mm 8mm;
+  border: 0;
+  color: #fff;
+  background: var(--accent);
+}
+.modern .detailStrip div {
+  padding: 2mm 0;
+}
+.modern .detailStrip div + div {
+  border: 0;
+}
+.modern .detailStrip dt {
+  color: rgb(255 255 255 / 65%);
+}
+.modern .itemsSection {
+  grid-column: 2;
+  grid-row: 1;
+  margin: 0;
+  padding: 10mm 9mm 4mm;
+}
+.modern .itemsSection h3 {
+  color: var(--muted);
+  border: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15pt;
+}
+.modern .itemsTable {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 3mm;
+}
+.modern .itemsTable th {
+  color: var(--muted);
+  border-bottom: 2px solid var(--line);
+  background: transparent;
+}
+.modern .termsAndTotals {
+  grid-column: 2;
+  grid-row: 2;
+  margin: 0;
+  padding: 4mm 9mm;
+}
+.modern .termsCard,
+.modern .totals {
+  border: 1px solid var(--line);
+  border-radius: 3mm;
+  background: var(--palette-tertiary);
+}
+.modern .termsCard {
+  border-left: 1px solid var(--line);
+}
+.modern .totalDue dd,
+.modern .termsCard .sectionLabel {
+  color: var(--accent) !important;
+}
+.modern .paymentInstructions {
+  grid-column: 2;
+  grid-row: 3;
+  margin: 0;
+  padding: 3mm 9mm;
+}
+/* Modern is a grid, not a flow — anything unplaced would auto-flow into the
+   first free cell, which is the sidebar column. Row 4 of the content column
+   is the one free cell between the payment block (row 3) and the full-width
+   footer (row 5), which is exactly where the block belongs. */
+.modern .signatureBlock {
+  grid-column: 2;
+  grid-row: 4;
+  margin: 0;
+  padding: 3mm 9mm;
+}
+.modern .footer {
+  grid-column: 1 / -1;
+  grid-row: 5;
+  margin: 0;
+  padding: 5mm 10mm;
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.corporate {
+  --ink: var(--invoice-accent, #172554);
+  --muted: #53627d;
+  --line: color-mix(in srgb, var(--invoice-secondary, #0ea5e9) 28%, #dbe5f0);
+  --surface: var(--palette-tertiary);
+  --accent: var(--invoice-secondary, #0ea5e9);
+  background: var(--palette-tertiary);
+}
+.corporate .letterhead {
+  margin: -14mm -14mm 0;
+  padding: 12mm 14mm 8mm;
+  color: #fff;
+  background: var(--ink);
+}
+.corporate .logoFallback {
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  background: transparent;
+}
+.corporate .companyIdentity p,
+.corporate .companyIdentity h1 {
+  color: #fff;
+}
+.corporate .documentTitle {
+  padding: 0;
+  background: transparent;
+}
+.corporate .documentTitle p {
+  color: #cbd5e1;
+}
+.corporate .detailStrip {
+  color: #fff;
+  border: 0;
+  background: var(--ink);
+}
+.corporate .detailStrip dt {
+  color: #94a3b8;
+}
+.corporate .itemsTable th {
+  background: var(--accent);
+}
+.corporate .itemsTable tbody tr:last-child td {
+  border-bottom: 2px solid var(--accent);
+}
+.corporate .totalDue {
+  padding-inline: 2mm;
+  color: #fff;
+  border: 0;
+  background: var(--accent);
+}
+.corporate .totalDue dd {
+  color: #fff;
+}
+.corporate .footer {
+  margin-inline: -14mm;
+  margin-bottom: -14mm;
+  padding: 4mm 14mm;
+  color: #cbd5e1;
+  border: 0;
+  background: var(--ink);
+}
+
+.elegant {
+  --ink: #3b3028;
+  --muted: #78695c;
+  --line: color-mix(in srgb, var(--palette-secondary) 72%, var(--accent));
+  --surface: var(--palette-secondary);
+  --accent: var(--invoice-accent, #7c5c3b);
+  background: var(--palette-tertiary);
+}
+.elegant .letterhead {
+  display: block;
+  min-height: 0;
+  text-align: center;
+  border-top: 0;
+  border-bottom: 4px double var(--accent);
+}
+.elegant .companyIdentity {
+  display: block;
+}
+.elegant .logo,
+.elegant .logoFallback {
+  margin: 0 auto 2mm;
+}
+.elegant .logoFallback {
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  background: transparent;
+}
+.elegant .companyIdentity h1 {
+  color: var(--accent);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.elegant .documentTitle {
+  margin-top: 4mm;
+  text-align: center;
+}
+.elegant .documentTitle h2 {
+  display: inline-block;
+  border-bottom: 1px solid var(--accent);
+}
+.elegant .status {
+  color: var(--accent);
+  border: 0;
+  background: transparent;
+  font-style: italic;
+}
+.elegant .partyGrid {
+  grid-template-columns: 1fr 1fr;
+}
+.elegant .partyCard {
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  background: transparent;
+}
+.elegant .partyCard:last-child {
+  grid-column: 2;
+}
+.elegant .itemsTable th {
+  color: var(--ink);
+  border-top: 1px solid var(--accent);
+  border-bottom: 1px solid var(--accent);
+  background: transparent;
+}
+.elegant .termsCard {
+  border: 0;
+  border-top: 1px solid var(--line);
+  background: transparent;
+}
+.elegant .totalDue {
+  border-color: var(--accent);
+}
+
+.bold {
+  --ink: var(--invoice-secondary, #0f172a);
+  --muted: #526077;
+  --line: #d9e0e9;
+  --surface: #f8fafc;
+  --accent: var(--invoice-accent, #dc2626);
+}
+.bold .letterhead,
+.boldLetterhead {
+  position: relative;
+  min-height: 0;
+  padding-left: 5mm;
+  border: 0 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+.bold .letterhead::before,
+.boldLetterhead::before {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 1.5mm;
+  content: "";
+  background: var(--accent);
+}
+.bold .companyIdentity h1 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 800;
+}
+.bold .documentTitle {
+  padding: 0;
+  background: transparent;
+}
+.bold .documentTitle h2 {
+  color: var(--ink);
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 900;
+}
+.bold .summaryMetrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 3mm;
+  margin-top: 5mm;
+}
+.bold .summaryMetrics > div {
+  min-height: 24mm;
+  padding: 4mm;
+  border-radius: 2mm;
+  color: #fff;
+  box-shadow: 0 1mm 2mm rgb(15 23 42 / 12%);
+}
+.bold .metricSecondary {
+  background: var(--invoice-tertiary, #f59e0b);
+}
+.bold .metricDark {
+  background: var(--ink);
+}
+.bold .metricStatus {
+  background: #16a34a;
+}
+.bold .summaryMetrics span,
+.bold .summaryMetrics small {
+  display: block;
+}
+.bold .summaryMetrics span {
+  font-size: 6.5pt;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.bold .summaryMetrics strong {
+  display: block;
+  margin-top: 2mm;
+  font-size: 13pt;
+  line-height: 1;
+}
+.bold .summaryMetrics small {
+  margin-top: 1.5mm;
+  opacity: 0.82;
+  font-weight: 700;
+}
+.bold .metricPrimary {
+  background: var(--accent);
+}
+.bold .boldFacts {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  overflow: hidden;
+  margin-top: 5mm;
+  color: #fff;
+  border-radius: 2mm;
+  background: var(--ink);
+}
+.bold .boldFacts > div {
+  min-width: 0;
+  padding: 3mm 4mm;
+}
+.bold .boldFacts > div + div {
+  border-left: 1px solid rgb(255 255 255 / 14%);
+}
+.bold .boldFacts span,
+.bold .boldFacts strong {
+  display: block;
+}
+.bold .boldFacts span {
+  color: #cbd5e1;
+  font-size: 6pt;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.bold .boldFacts strong {
+  overflow: hidden;
+  margin-top: 1mm;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.bold .partyGrid,
+.bold .detailStrip {
+  display: none;
+}
+.bold .detailStrip {
+  overflow: hidden;
+  color: #fff;
+  border: 0;
+  border-radius: 2mm;
+  background: var(--ink);
+}
+.bold .detailStrip dt {
+  color: #94a3b8;
+}
+.bold .itemsTable th {
+  background: var(--ink);
+}
+.bold .itemsSection {
+  flex: 0 0 auto;
+  margin-top: 5mm;
+  padding: 4mm;
+  border: 1px solid var(--line);
+  border-left: 1.5mm solid var(--accent);
+  border-radius: 1.5mm;
+  background: var(--palette-tertiary);
+}
+.bold .itemsSection h3 {
+  margin: -4mm -4mm 3mm;
+  padding: 3mm 4mm;
+  color: var(--ink);
+  border: 0;
+  background: color-mix(in srgb, var(--accent) 7%, white);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10pt;
+  font-weight: 900;
+}
+.bold .itemsTable tbody tr:nth-child(even) {
+  background: #f8fafc;
+}
+.bold .termsAndTotals {
+  margin-top: 4mm;
+}
+.bold .termsCard {
+  border-left-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 7%, white);
+}
+.bold .totalDue {
+  padding: 3mm;
+  color: #fff;
+  border: 0;
+  border-radius: 2mm;
+  background: var(--accent);
+  box-shadow: 0 1mm 2mm color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.bold .totalDue dd {
+  color: #fff;
+}
+.bold .paymentInstructions {
+  margin-top: 4mm;
+  padding: 4mm;
+  border-left: 1.5mm solid var(--ink);
+  border-radius: 2mm;
+  background: var(--surface);
+}
+.bold .footer {
+  padding: 3mm 4mm;
+  color: #cbd5e1;
+  border: 0;
+  border-radius: 2mm;
+  background: var(--ink);
+}
+
+/* Typography is a document setting, so theme styling must not replace the
+   selected family. Text colour remains independent from structural palette
+   colours used for rules, headers, and surfaces. */
+.document .companyIdentity h1,
+.document .documentTitle h2,
+.document .itemsSection h3,
+.document .paymentInstructions h3,
+.document .status {
+  font-family: inherit;
+}
+
+.document .companyIdentity h1,
+.document .documentTitle h2,
+.document .partyCard > strong,
+.document .sectionLabel,
+.document .itemsSection h3,
+.document .paymentInstructions h3,
+.document .paymentInstructions strong,
+.document .totalDue {
+  color: var(--text);
+}
+
+.modern .companyIdentity h1,
+.modern .documentTitle h2,
+.modern .partyCard > strong,
+.modern .sectionLabel,
+.corporate .companyIdentity h1,
+.corporate .documentTitle h2,
+.corporate .sectionLabel,
+.bold .itemsTable th,
+.bold .summaryMetrics,
+.bold .boldFacts {
+  color: #fff;
+}
+
+@media screen {
+  .document {
+    box-shadow: 0 24px 70px rgb(15 23 42 / 14%);
+  }
+}
+
+.preview {
+  zoom: 0.62;
+  margin: 0 auto;
+  pointer-events: none;
+}
+
+.previewLarge {
+  zoom: 0.75;
+  margin: 0 auto;
+  pointer-events: none;
+}
+
+/*
+ * A 210mm sheet at 0.62 is about 492px, wider than any phone, so the preview
+ * only ever showed its left-hand third. Scaled down to fit instead — the text is
+ * small at that size, which is what the fullscreen view is for.
+ *
+ * Two steps rather than one. The panel is the viewport less the page gutter,
+ * the card's padding and the viewport's own — about 110px — so 0.4 still left a
+ * 794px sheet ~30px too wide on a 390px phone and the panel scrolled sideways
+ * by a sliver. 0.32 clears it down to a 360px screen; anything roomier than a
+ * phone gets the larger step, where 0.4 fits with room to spare.
+ */
+@media screen and (max-width: 480px) {
+  .preview {
+    zoom: 0.32;
+  }
+  /* The print preview dialog is nearly the width of the screen, so this
+     one has more room than the settings panel - but not the 0.42 it had,
+     which overflowed the dialog on a 360px phone. */
+  .previewLarge {
+    zoom: 0.35;
+  }
+}
+
+@media screen and (min-width: 481px) and (max-width: 700px) {
+  .preview {
+    zoom: 0.4;
+  }
+  .previewLarge {
+    zoom: 0.42;
+  }
+}
+
+/*
+ * Modern Minimal sizes its table by content, not by fixed millimetres.
+ *
+ * The shared table is `table-layout: fixed` with every column but the
+ * description given a width in mm — around 161mm with all three detail columns
+ * on. That fits the 182mm the other themes have, but this one puts a sidebar
+ * down the left and leaves the table 70% of the sheet, so the fixed columns
+ * came to more than the space available and the description was squeezed to
+ * nothing: one character per line down the page.
+ *
+ * Automatic layout lets the browser share the width out by content, which is
+ * what a narrower column needs.
+ */
+.modern .itemsTable {
+  table-layout: auto;
+}
+.modern .itemsTable .indexColumn,
+.modern .itemsTable .dateColumn,
+.modern .itemsTable .detailColumn,
+.modern .itemsTable .quantityColumn,
+.modern .itemsTable .moneyColumn {
+  width: auto;
+}
+.modern .itemsTable th,
+.modern .itemsTable td {
+  white-space: nowrap;
+}
+.modern .itemsTable th:nth-child(2),
+.modern .itemsTable td:nth-child(2) {
+  white-space: normal;
+}
+
+/*
+ * The nowrap above was holding the headings on one line too, which is what
+ * pushed the table past the edge of the page.
+ *
+ * With automatic layout, a table is at least as wide as its content refuses to
+ * be narrower than — so "Ref. code", "Category", "Location" and "Unit price"
+ * unwrapped set a floor the 70% column could not meet, and `.modern`'s
+ * overflow: hidden cut the Amount column off rather than showing a scrollbar.
+ *
+ * Headings wrap; only the figures still hold their line, since a total broken
+ * across two lines is worse than a heading on two. Padding and type come down
+ * with them: nine columns at 2mm each side is 36mm of padding inside about
+ * 129mm of usable width, which is a quarter of the table spent on gaps before
+ * a single character is drawn. The full-width templates have 182mm and can
+ * afford it; this one cannot.
+ */
+.modern .itemsTable th {
+  white-space: normal;
+}
+.modern .itemsTable th,
+.modern .itemsTable td {
+  padding: 1.4mm 1mm;
+  font-size: 6pt;
+}
+.modern .itemsTable .number {
+  white-space: nowrap;
+}
+
+/*
+ * Full bleed, stated as a width rather than left to negative margins.
+ *
+ * Corporate's banner and footer cancel the sheet's 14mm padding with
+ * `margin: -14mm`, which widens the box only if it is free to grow. As a flex
+ * item in the document's column it is not — it sizes to the line box — so the
+ * bands stopped short of both edges and left a white margin down each side.
+ * Giving them the full width outright removes the ambiguity.
+ *
+ * Modern's sidebar has the same job done by `padding: 0` on the sheet, restated
+ * here so nothing later in the cascade can put the padding back.
+ */
+/*
+ * Full bleed, stated as a width rather than left to negative margins.
+ *
+ * Corporate's banner and footer cancel the sheet's 14mm padding with
+ * `margin: -14mm`, which widens the box only if it is free to grow. As a flex
+ * item in the document's column it is not — it sizes to the line box — so the
+ * bands stopped short of both edges and left a white margin down each side.
+ * Giving them the full width outright removes the ambiguity.
+ *
+ * Modern's sidebar has the same job done by `padding: 0` on the sheet, restated
+ * here so nothing later in the cascade can put the padding back.
+ */
+@media print {
+  .previewHighlight {
+    outline: 0;
+    box-shadow: none;
+    animation: none;
+  }
+
+  /*
+   * A millimetre of slack against the page box.
+   *
+   * The sheet was 297mm tall inside an A4 page that is also 297mm, leaving no
+   * room for rounding — and print rounds, between CSS millimetres, the driver's
+   * page box and the device's dots. Half a millimetre over and the browser opens
+   * a second page; because the major sections below carry `break-inside: avoid`,
+   * it then moves whole blocks across rather than a sliver, so the overflow
+   * looked like the whole document had printed twice.
+   *
+   * 296mm still fills the sheet — the footer is pushed to the bottom by the flex
+   * column, not by this height — and can no longer round past the boundary.
+   */
+  /*
+   * One sheet, fixed, whatever the theme does.
+   *
+   * `min-height` let the sheet grow, and Classic and Elegant grew past the page
+   * — each in their own way, which is why chasing it rule by rule kept failing.
+   * A fixed height with the overflow clipped removes the possibility: there is
+   * no second page for a browser to open because the element cannot be taller
+   * than one.
+   *
+   * `break-after: avoid` stops anything following the document from starting a
+   * page of its own.
+   *
+   * The trade is real and deliberate: a document with more lines than a sheet
+   * holds is cut rather than continued. These layouts were designed as
+   * single-sheet documents — the terms card, totals and payment block are all
+   * pinned to the bottom of one page — so a second page never rendered
+   * correctly anyway.
+   */
+  .document {
+    width: 100%;
+    height: 296mm;
+    max-height: 296mm;
+    margin: 0;
+    overflow: hidden;
+    box-shadow: none;
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+  .letter {
+    height: 278.4mm;
+    max-height: 278.4mm;
+  }
+  .preview,
+  .previewLarge {
+    zoom: 1;
+  }
+  .letterhead,
+  .partyGrid,
+  .detailStrip,
+  .termsAndTotals,
+  .paymentInstructions,
+  .signatureBlock,
+  .footer {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
+/*
+ * Screen only.
+ *
+ * A print media query is not the only thing that applies on paper: a width query
+ * is evaluated against the page box, and an A4 sheet lands under this breakpoint
+ * — so every rule in here was being applied to print. The party cards and the
+ * terms/totals pair collapsed to one column each and `min-height` was cleared,
+ * which turned a document that fits one sheet into one that spills onto a second
+ * and gets cut. None of it is wanted on paper, where the width is always A4.
+ */
+@media screen and (max-width: 760px) {
+  /*
+   * ...and only when the document *is* the page, not a picture of one.
+   *
+   * The settings previews render this same document inside a shrink-to-fit box
+   * and scale it down with `zoom`. `width: 100%` there has no definite
+   * containing block to resolve against, so Chrome fell back to its own
+   * maximum and laid the sheet out about a million pixels wide - which is why
+   * the mobile preview showed a handful of stretched blank bars and a hairline
+   * scrollbar rather than a document.
+   *
+   * Reflowing the insides would be wrong in a preview regardless: a preview
+   * that stacks its party cards into one column is a picture of a document the
+   * printer will never produce. Guarded with `:where()`, which carries no
+   * specificity, so nothing else in this stylesheet changes weight.
+   */
+  .document:where(:not(.preview, .previewLarge)),
+  .letter:where(:not(.preview, .previewLarge)) {
+    width: 100%;
+    min-height: 0;
+    padding: 24px;
+  }
+  .corporate:where(:not(.preview, .previewLarge)) .letterhead,
+  .corporate:where(:not(.preview, .previewLarge)) .footer {
+    margin: -24px -24px 0;
+    padding: 28px 24px;
+  }
+  .corporate:where(:not(.preview, .previewLarge)) .footer {
+    margin-top: 24px;
+    margin-bottom: -24px;
+  }
+  .modern:where(:not(.preview, .previewLarge)) {
+    display: block;
+  }
+  .modern:where(:not(.preview, .previewLarge)) .letterhead,
+  .modern:where(:not(.preview, .previewLarge)) .partyGrid,
+  .modern:where(:not(.preview, .previewLarge)) .detailStrip,
+  .modern:where(:not(.preview, .previewLarge)) .itemsSection,
+  .modern:where(:not(.preview, .previewLarge)) .termsAndTotals,
+  .modern:where(:not(.preview, .previewLarge)) .paymentInstructions,
+  .modern:where(:not(.preview, .previewLarge)) .signatureBlock,
+  .modern:where(:not(.preview, .previewLarge)) .footer {
+    padding: 24px;
+  }
+  .modern:where(:not(.preview, .previewLarge)) .partyGrid,
+  .modern:where(:not(.preview, .previewLarge)) .detailStrip {
+    background: var(--accent);
+  }
+  :where(.document:not(.preview, .previewLarge)) .letterhead,
+  :where(.document:not(.preview, .previewLarge)) .partyGrid,
+  :where(.document:not(.preview, .previewLarge)) .termsAndTotals {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
+  :where(.document:not(.preview, .previewLarge)) .documentTitle {
+    width: 100%;
+    text-align: left;
+  }
+  :where(.document:not(.preview, .previewLarge)) .partyGrid {
+    grid-template-columns: 1fr;
+  }
+  :where(.document:not(.preview, .previewLarge)) .itemsSection {
+    overflow-x: auto;
+  }
+  :where(.document:not(.preview, .previewLarge)) .itemsTable {
+    min-width: 620px;
+  }
+  :where(.document:not(.preview, .previewLarge)) .footer {
+    flex-direction: column;
+  }
+  .bold:where(:not(.preview, .previewLarge)) .summaryMetrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ─── Logo position ───────────────────────────────────────────────────────
+ *
+ * Three arrangements of the letterhead, driven by one attribute on the
+ * document root. Written once here rather than six times per theme: every
+ * template shares the same header markup and differs only in colour and
+ * type, so the arrangement is the same problem in all six.
+ *
+ * Placed at the end of the file deliberately. An attribute selector carries
+ * the same specificity as a class, so these tie with the per-theme overrides
+ * above (.modern .letterhead and friends) and win on source order. Moving
+ * this block earlier would silently stop it applying to those themes.
+ *
+ * "left" needs no rules at all — it is what the templates already do, which
+ * is also why it is the default for anything saved before this existed.
+ */
+
+/* Right: the whole letterhead mirrors. The identity block trades sides with
+   the document facts and reverses internally, so the logo ends up at the
+   outer edge of the page rather than adrift in the middle of its own block. */
+[data-logo-position="right"] .letterhead {
+  flex-direction: row-reverse;
+}
+[data-logo-position="right"] .companyIdentity {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+[data-logo-position="right"] .documentTitle {
+  text-align: left;
+}
+
+/* Center: the letterhead stacks so the logo can sit alone on the first line,
+   with the company details and then the document facts centred beneath it.
+   Bottom margins rather than a gap, because the base rule sets a 12mm gap
+   sized for a row and that is far too much between stacked lines. */
+[data-logo-position="center"] .letterhead {
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  text-align: center;
+}
+[data-logo-position="center"] .companyIdentity {
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 4mm;
+  text-align: center;
+}
+[data-logo-position="center"] .documentTitle {
+  text-align: center;
+}
+
+/* The bold template paints its letterhead as a full-bleed block with a
+   pseudo-element behind it, so centring has to pull the text back to the
+   middle of that block rather than of the page. */
+[data-logo-position="center"] .bold .letterhead,
+[data-logo-position="center"] .boldLetterhead {
+  align-items: center;
+}
+
+/*
+ * Narrow screens stack the letterhead regardless of where the logo sits.
+ *
+ * The breakpoint above sets `.letterhead { flex-direction: column }` at one
+ * class of specificity. The logo-position rules are an attribute plus a class,
+ * so they outrank it and would force row-reverse back on at phone widths —
+ * putting the logo and the document facts side by side in about 150px each.
+ *
+ * Screen only, matching the block it defends. Print is always A4 and wants the
+ * arrangement it was given.
+ */
+@media screen and (max-width: 760px) {
+  [data-logo-position="right"] .letterhead,
+  [data-logo-position="center"] .letterhead {
+    flex-direction: column;
+  }
+  /* The identity block itself can still mirror — a logo beside two short lines
+     of company detail fits at this width, which is why the base layout does it
+     too. Only the outer row has to give way. */
+  [data-logo-position="right"] .documentTitle {
+    width: 100%;
+  }
+}
+
+/* ─── Logo position: the templates that are not flex rows ──────────────────
+ *
+ * Classic and Elegant lay their letterhead out as `display: block` with
+ * `text-align: center`, and centre the logo with `margin: 0 auto`. The
+ * direction rules above do nothing to a block, which is why those two ignored
+ * the setting entirely. Move the auto margin instead, and take the rest of the
+ * letterhead with it — a logo pushed left above a centred company name and a
+ * centred title reads as a mistake rather than a choice.
+ *
+ * Center needs no rules here: it is what both templates already do.
+ */
+[data-logo-position="left"].classic .letterhead,
+[data-logo-position="left"].elegant .letterhead,
+[data-logo-position="left"].classic .documentTitle,
+[data-logo-position="left"].elegant .documentTitle {
+  text-align: left;
+}
+[data-logo-position="left"].classic .logo,
+[data-logo-position="left"].classic .logoFallback,
+[data-logo-position="left"].elegant .logo,
+[data-logo-position="left"].elegant .logoFallback {
+  margin-right: auto;
+  margin-left: 0;
+}
+
+[data-logo-position="right"].classic .letterhead,
+[data-logo-position="right"].elegant .letterhead,
+[data-logo-position="right"].classic .documentTitle,
+[data-logo-position="right"].elegant .documentTitle {
+  text-align: right;
+}
+[data-logo-position="right"].classic .logo,
+[data-logo-position="right"].classic .logoFallback,
+[data-logo-position="right"].elegant .logo,
+[data-logo-position="right"].elegant .logoFallback {
+  margin-right: 0;
+  margin-left: auto;
+}
+
+/*
+ * Modern Minimal has no position to move the logo to.
+ *
+ * Its letterhead is not a band across the top — it is a coloured sidebar down
+ * the left of the page, 30% wide, with the logo, the company and the document
+ * facts stacked inside it. Turning that column into a row put a logo and three
+ * lines of company detail side by side in about 20mm each, which is the overlap
+ * this rule exists to prevent. The settings screen locks the control for this
+ * template and says so, rather than offering a choice that cannot be honoured.
+ *
+ * Compound selector, so it outranks the direction rules above whatever the
+ * attribute says.
+ */
+[data-logo-position].modern .letterhead,
+[data-logo-position].modern .companyIdentity {
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+[data-logo-position].modern .documentTitle {
+  text-align: left;
+}
+
+/* ─── Stamp & signature position ──────────────────────────────────────────
+ *
+ * Same shape as the logo position above: one attribute on the document root,
+ * one rule, all six templates. "right" is the base rule's own arrangement and
+ * needs nothing here, so anything saved before this existed keeps it.
+ *
+ * The internal order — stamp first, signature second — deliberately stays the
+ * same on both sides: only the anchoring edge moves, so the signature always
+ * sits nearest the middle of the page and the artwork nearest the margin.
+ */
+[data-signature-position="left"] .signatureBlock {
+  justify-content: flex-start;
+}
